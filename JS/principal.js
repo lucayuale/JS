@@ -6,6 +6,7 @@ const marcas = ["Amarok", "Nissan", "Hilux", "Strada"]
 const opiniones =["son muy seguras y faciles de colocar","super sencillo de colocar y muy buena la garantia",]
 function mostrarmarcas(){
     alert(marcas)
+    console.log(marcas)
     menu()
 }
 function inicio(){
@@ -40,6 +41,11 @@ function menu(){
         break
         case "4":
             opinion()
+        break
+        case "":
+            alert("ingrese una opcion")
+            menu()
+            break
         break
         default:
             alert("Gracias por visitarnos")
