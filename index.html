@@ -6,11 +6,42 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <header>Solid-box</header>
+    <main>
+        <article>
+            <h2>Productos</h2>
+            <form style="width: 200px; padding: 10px;">
+                <select class="formulario1" aria-label="Default select example" id="marca">
+                    <option selected value="0">Todo</option>
+                    <option value="strada">Strada</option>
+                    <option value="hilux">Hilux</option>
+                    <option value="nissan">Nissan</option>
+                    <option value="ranger">Ranger</option>
+                </select>
 
+            </form>
+            <div class="container">
+                <div class="row" id="contenedorProductos" style="display:flex;justify-content: center;">
 
-
-
+                </div>
+            </div>
+        </article>
+        <article>
+        <h2>Carrito</h2>
+        <ul id="listadoc"></ul>
+        <p id="ultimocarrito"></p>
+        <form id="formfinal">
+            <label for="nombre">Nombre:</label>
+            <input required type="text" name="nombre">
+            <label for="email">Email:</label>
+            <input required type="email" name="email">
+            <label for="telefono">Telefono:</label>
+            <input required type="number" name="telefono">
+            <input type="submit" value="Finalizar Compra" class="btn btn-primary" id="botonCompraFinal">
+        </form>
+        </article>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="/JS/principal.js"></script>
 </body>
 </html>
