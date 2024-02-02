@@ -1,18 +1,4 @@
-class tapas{
-    constructor(id, marca, modelo,precio, stock){
-        this.id = id
-        this.marca = marca
-        this.modelo = modelo
-        this.precio = precio
-        this.stock = stock
-    }
-}
-const camionetas = [
-    {id:"001", marca:"hilux",modelo: "d/c",precio: 200, stock: 30},
-    {id:"002", marca:"nissan",modelo: "frontier",precio: 500,stock: 10},
-    {id:"003", marca:"ranger",modelo: "xlt",precio: 350,stock: 17},
-    {id:"004", marca:"strada",modelo: "comun",precio: 400,stock: 21},
-]
+
 class nuevosproductos{
     constructor(marca,precio,modelo, id, stock){
         this.marca = marca
@@ -67,21 +53,53 @@ const renderizarProductos = (capsula)=>{
             evento.preventDefault()
             const contadorQuantity = Number(document.getElementById(`contador${id}`).value)
             if(contadorQuantity>0){
-                agregarCarrito({ id, modelo, precio, stock, marca, quantity:contadorQuantity})
+                if(carrito.some(producto=>producto.id === id)){
+                    carrito = carrito.map(element=>{
+                        if(element.id===id){
+                            element.quantity+=contadorQuantity
+                        }
+                        return element
+                    })
+                } else {
+                    agregarCarrito({ id, modelo, precio, stock, marca, quantity:contadorQuantity})
+                }
                 renderizarCarrito()
                 const form = document.getElementById(`form${id}`)
                 form.reset()
+                Swal.fire({
+                    icon: 'success',
+                    title: `Agrego ${contadorQuantity} ${marca} al carrito`,
+                    showConfirmButton: true,
+                    timer: 2500
+                })
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: `al menos agregue un producto`,
+                    showConfirmButton: true,
+                    timer: 2500
+                })
             }
         }) 
     })
 }
-
-const productosPreexistentes = ()=>{
+const productosPreexistentes = async ()=>{
     if (productos.length===0){
-        camionetas.forEach(prod=>{
-            let dato = JSON.parse(JSON.stringify(prod))
-                agregarproducto(dato)}
-            )
+        try{
+            //traemos los productos del json
+            const productosBase1 = await fetch("./productos.json" )
+            const productosBase2 = await productosBase1.json()
+            productosBase2.forEach(prod=>{
+                let datos = JSON.parse(JSON.stringify(prod))
+                agregarproducto(datos)}
+                )
+        } catch(err) {
+            console.error("no funciono el fetch:", err)
+        }finally{
+            renderizarProductos(productos)
+        }
+    } else {
+        renderizarProductos(productos)
     }
 }
 
@@ -115,14 +133,18 @@ const renderizarCarrito = ()=>{
             carrito = carrito.filter((elemento)=>{
                 if(elemento.id !== id){
                     return elemento
-                }else{
-                    
                 }
                 
             })
             let carritoString = JSON.stringify(carrito)
             localStorage.setItem("carrito", carritoString)
             renderizarCarrito()
+                        Swal.fire({
+                icon: 'warning',
+                title: `quito las tapas ${marca} del carrito`,
+                showConfirmButton: true,
+                timer: 3500
+            })
         })
         let carritoString = JSON.stringify(carrito)
         localStorage.setItem("carrito", carritoString)
@@ -140,10 +162,16 @@ const finalizarCompra = (event)=>{
     event.preventDefault()
     const data = new FormData(event.target)
     const cliente = Object.fromEntries(data)
-    const ticket = {cliente: cliente, total:totalCarrito(),id:pedidos.length, productos:carrito}
+    const idTicket = pedidos.length
+    const ticket = {cliente: cliente, total:totalCarrito(),id:pedidos.length, productos:carrito,fecha: new date}
     pedidos.push(ticket)
     localStorage.setItem("pedidos", JSON.stringify(pedidos))
     borrarCarrito()
+    Swal.fire({
+        icon: 'success',
+        title: `Muchas gracias. Su ticket es ${idTicket}`,
+        showConfirmButton: true,
+    })
     let mensaje = document.getElementById("ultimocarrito")
     mensaje.innerHTML = "Muchas gracias por su compra."
 
@@ -169,7 +197,6 @@ selectorTipo.onchange = (evt)=>{
 
 const app = ()=>{
     productosPreexistentes()
-    renderizarProductos(productos)
     renderizarCarrito()
     totalCarritoRender()
 }

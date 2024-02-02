@@ -1,0 +1,6 @@
+[
+    {"id":"001", "marca":"hilux","modelo": "d/c","precio": 200, "stock": 30},
+    {"id":"002", "marca":"nissan","modelo": "frontier","precio": 500,"stock": 10},
+    {"id":"003", "marca":"ranger","modelo": "xlt","precio": 350,"stock": 17},
+    {"id":"004", "marca":"strada","modelo": "comun","precio": 400,"stock": 21}
+]
